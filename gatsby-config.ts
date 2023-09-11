@@ -8,7 +8,7 @@ const config: GatsbyConfig = {
     // You can overwrite values here that are used for the SEO component
     // You can also add new values here to query them like usual
     // See all options: https://github.com/LekoArts/gatsby-themes/blob/main/themes/gatsby-theme-minimal-blog/gatsby-config.mjs
-    siteTitle: `SEUNG LAB`,
+    siteTitle: `SEUNGLAB.dev`,
     siteTitleAlt: `SEUNG LAB`,
     siteHeadline: `Developer Blog - SEUNG LAB`,
     siteUrl: `https://seunglab.netlify.app/`,
@@ -135,6 +135,19 @@ const config: GatsbyConfig = {
         saveReportTo: `${__dirname}/public/.statoscope/_bundle.html`,
         saveStatsTo: `${__dirname}/public/.statoscope/_stats.json`,
         open: false,
+      },
+    },
+    {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {
+        // 여기에 추적 ID를 넣어주세요
+        trackingId: "G-BRDJRECNR2",
+        // IP 주소를 익명화하려면 true로 설정
+        anonymize: true,
+        // 페이지 뷰를 발송하려면 true로 설정
+        respectDNT: true,
+        // 추적을 위해 쿠키를 사용하려면 아래를 추가하세요
+        //cookieDomain: "example.com",
       },
     },
   ].filter(Boolean) as Array<PluginRef>,
