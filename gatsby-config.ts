@@ -138,16 +138,10 @@ const config: GatsbyConfig = {
       },
     },
     {
-      resolve: `gatsby-plugin-google-analytics`,
+      resolve: `gatsby-plugin-gtag`,
       options: {
-        // 여기에 추적 ID를 넣어주세요
-        trackingId: "G-BRDJRECNR2",
-        // IP 주소를 익명화하려면 true로 설정
-        anonymize: true,
-        // 페이지 뷰를 발송하려면 true로 설정
-        respectDNT: true,
-        // 추적을 위해 쿠키를 사용하려면 아래를 추가하세요
-        //cookieDomain: "example.com",
+          trackingId: `G-BRDJRECNR2`,
+          head: true,
       },
     },
   ].filter(Boolean) as Array<PluginRef>,
