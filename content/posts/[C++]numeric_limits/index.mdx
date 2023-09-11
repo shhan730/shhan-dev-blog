@@ -1,0 +1,108 @@
+---
+title: C++의 numeric_limits
+date: 2022-09-11
+tags:
+  - Code
+---
+
+# C++의 numeric_limits
+
+> C++을 사용하다 보면 숫자 타입들의 최댓값과 최솟값을 활용해야 하는 경우가 있다.
+> 이런 경우에 우리는 `numeric_limits<int>::min`, `numeric_limits<float>::max` 와 같이
+> 산술 타입의 다양한 속성을 표준화된 방법으로 조회할 수 있는 [numeric_limits](https://en.cppreference.com/w/cpp/types/numeric_limits) 클래스를 활용한다.
+
+### Sample Code
+```cpp
+#include <limits>
+#include <iostream>
+ 
+int main() 
+{
+    std::cout
+        << "type\t│ lowest()\t│ min()\t\t│ max()\n"
+        << "bool\t│ "
+        << std::numeric_limits<bool>::lowest() << "\t\t│ "
+        << std::numeric_limits<bool>::min() << "\t\t│ "
+        << std::numeric_limits<bool>::max() << '\n'
+        << "uchar\t│ "
+        << +std::numeric_limits<unsigned char>::lowest() << "\t\t│ "
+        << +std::numeric_limits<unsigned char>::min() << "\t\t│ "
+        << +std::numeric_limits<unsigned char>::max() << '\n'
+        << "int\t│ "
+        << std::numeric_limits<int>::lowest() << "\t│ "
+        << std::numeric_limits<int>::min() << "\t│ "
+        << std::numeric_limits<int>::max() << '\n'
+        << "float\t│ "
+        << std::numeric_limits<float>::lowest() << "\t│ "
+        << std::numeric_limits<float>::min() << "\t│ "
+        << std::numeric_limits<float>::max() << '\n'
+        << "double\t│ "
+        << std::numeric_limits<double>::lowest() << "\t│ "
+        << std::numeric_limits<double>::min() << "\t│ "
+        << std::numeric_limits<double>::max() << '\n';
+}
+```
+
+### Possible Output
+```bash
+type	│ lowest()	│ min()	│ max()
+bool	│ 0		│ 0		│ 1
+uchar	│ 0		│ 0		│ 255
+int	│ -2147483648	│ -2147483648	│ 2147483647
+float	│ -3.40282e+38	│ 1.17549e-38	│ 3.40282e+38
+double	│ -1.79769e+308 │ 2.22507e-308	│ 1.79769e+308
+```
+
+여기서 흥미로운 점이 하나 있다.
+바로 가장 작은 값을 조회하는 방법이 `min()`과 `lowest()` 2가지라는 것이다.
+심지어 `float`나 `double`의 경우에는 2개의 값이 달랐다.
+왜 이러한 차이가 발생한 것이며, 둘의 차이는 무엇일까?
+
+## `numeric_limits<T>::min()`
+
+
+> Returns the minimum finite value representable by the numeric type T.
+> For floating-point types with denormalization, min returns the minimum positive normalized value.
+> To find the value that has no values less than it, use numeric_limits::lowest.
+>
+> 숫자 형식 T로 나타낼 수 있는 최소 유한 값을 반환합니다.
+> Denormalization이 있는 부동 소수점 유형의 경우 min은 정규화된 최소 양의 값을 반환합니다.
+> 이 값보다 작은 값이 없는 값을 찾으려면 numeric_limits::lowest를 사용합니다.
+
+해석을 해보기 앞서, **Denormalization**이란 무엇일까?
+[**IEEE-754**](https://ko.wikipedia.org/wiki/IEEE_754) 부동소수점 표현법에서 일반적으로 표현할 수 있는 수보다 더 작지만 0이 아닌 값을 말한다.
+0과 부동소수점이 표현할 수 있는 최솟값의 사이에 존재하는 값이라고 생각하면 된다.
+
+따라서 `T`에 Denormalization이 존재하는 부동소수점 타입이 들어왔을 때 `min()`은 부동소수점 표현법에서 일반적으로 표현 가능한 수들 중에서 0이 아닌 가장 작은 값을 반환한다.
+
+만약 부동소수점 표현법과 관계없이 0이 아닌 이 값보다 더 작은 값이 없는, 말 그대로 진짜 최솟값을 찾고 싶은 경우 `lowest()`를 사용해야 한다.
+
+## `numeric_limits<T>::lowest()`
+
+> Returns the lowest finite value representable by the numeric type T, that is, a finite value x such that there is no other finite value y where y < x. 
+>
+> 숫자 유형 T로 나타낼 수 있는 가장 낮은 유한 값, 즉 y < x에 다른 유한 값 y가 없는 유한 값 x를 반환합니다.
+
+말 그대로 해당 값보다 더 작은 다른 유한값이 없는 값을 반환한다.
+앞서 설명한 `min()`과는 달리 부동소수점의 표현법에 관여를 받지 않고 정말 가장 작은 값을 반환한다.
+따라서 `T`에 Denormalization이 존재하는 부동소수점 타입이 들어오면, Denormalization값을 포함한 모든 값 중에서 가장 작은 값을 반환하는 것이다.
+
+## 결론
+부동소수점 타입에서 우리가 원하는 "진짜" 최솟값을 찾고 싶다면 반드시 `lowest()`를 사용하는 것이 좋다.
+이는 부동소수점의 표현법과 상관없이, Denormalization값을 포함한 모든 값 중에서 가장 작은 값을 반환할 것이다.
+
+## One More Thing.
+코드를 작성하면서 템플릿을 사용할 때가 있다.
+Ex) `numeric_limits<T>::lowest()`
+
+이때 T에 정수타입이 입력될지 부동소수점 타입이 입력될지 알지 못함으로, 최솟값을 반환하는 기능을 원할 경우 항상 `lowest()`를 사용하는 것이 좋다.
+
+---
+### References
+[std::numeric_limits](https://en.cppreference.com/w/cpp/types/numeric_limits)
+
+[Denormalized number](https://ko.wikipedia.org/wiki/%EB%B9%84%EC%A0%95%EA%B7%9C_%EA%B0%92)
+
+[Arithmetic underflow](https://ko.wikipedia.org/wiki/%EC%96%B8%EB%8D%94%ED%94%8C%EB%A1%9C)
+
+[IEEE 754](https://ko.wikipedia.org/wiki/IEEE_754)
