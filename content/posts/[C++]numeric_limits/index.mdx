@@ -2,7 +2,7 @@
 title: C++의 numeric_limits
 date: 2022-09-11
 tags:
-  - Code
+    - Code
 ---
 
 # C++의 numeric_limits
@@ -12,11 +12,12 @@ tags:
 > 산술 타입의 다양한 속성을 표준화된 방법으로 조회할 수 있는 [numeric_limits](https://en.cppreference.com/w/cpp/types/numeric_limits) 클래스를 활용한다.
 
 ### Sample Code
+
 ```cpp
 #include <limits>
 #include <iostream>
- 
-int main() 
+
+int main()
 {
     std::cout
         << "type\t│ lowest()\t│ min()\t\t│ max()\n"
@@ -44,6 +45,7 @@ int main()
 ```
 
 ### Possible Output
+
 ```bash
 type	│ lowest()	│ min()	│ max()
 bool	│ 0		│ 0		│ 1
@@ -59,7 +61,6 @@ double	│ -1.79769e+308 │ 2.22507e-308	│ 1.79769e+308
 왜 이러한 차이가 발생한 것이며, 둘의 차이는 무엇일까?
 
 ## `numeric_limits<T>::min()`
-
 
 > Returns the minimum finite value representable by the numeric type T.
 > For floating-point types with denormalization, min returns the minimum positive normalized value.
@@ -79,7 +80,7 @@ double	│ -1.79769e+308 │ 2.22507e-308	│ 1.79769e+308
 
 ## `numeric_limits<T>::lowest()`
 
-> Returns the lowest finite value representable by the numeric type T, that is, a finite value x such that there is no other finite value y where y < x. 
+> Returns the lowest finite value representable by the numeric type T, that is, a finite value x such that there is no other finite value y where y < x.
 >
 > 숫자 유형 T로 나타낼 수 있는 가장 낮은 유한 값, 즉 y < x에 다른 유한 값 y가 없는 유한 값 x를 반환합니다.
 
@@ -88,17 +89,21 @@ double	│ -1.79769e+308 │ 2.22507e-308	│ 1.79769e+308
 따라서 `T`에 Denormalization이 존재하는 부동소수점 타입이 들어오면, Denormalization값을 포함한 모든 값 중에서 가장 작은 값을 반환하는 것이다.
 
 ## 결론
+
 부동소수점 타입에서 우리가 원하는 "진짜" 최솟값을 찾고 싶다면 반드시 `lowest()`를 사용하는 것이 좋다.
 이는 부동소수점의 표현법과 상관없이, Denormalization값을 포함한 모든 값 중에서 가장 작은 값을 반환할 것이다.
 
 ## One More Thing.
+
 코드를 작성하면서 템플릿을 사용할 때가 있다.
 Ex) `numeric_limits<T>::lowest()`
 
 이때 T에 정수타입이 입력될지 부동소수점 타입이 입력될지 알지 못함으로, 최솟값을 반환하는 기능을 원할 경우 항상 `lowest()`를 사용하는 것이 좋다.
 
 ---
+
 ### References
+
 [std::numeric_limits](https://en.cppreference.com/w/cpp/types/numeric_limits)
 
 [Denormalized number](https://ko.wikipedia.org/wiki/%EB%B9%84%EC%A0%95%EA%B7%9C_%EA%B0%92)
@@ -106,3 +111,5 @@ Ex) `numeric_limits<T>::lowest()`
 [Arithmetic underflow](https://ko.wikipedia.org/wiki/%EC%96%B8%EB%8D%94%ED%94%8C%EB%A1%9C)
 
 [IEEE 754](https://ko.wikipedia.org/wiki/IEEE_754)
+
+<DisqusForMDX post={{ id: 'C++의 numeric_limits', title: 'SEUNGLAB.dev' }} />
