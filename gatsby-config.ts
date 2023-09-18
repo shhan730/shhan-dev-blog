@@ -1,86 +1,92 @@
-import type { GatsbyConfig, PluginRef } from "gatsby"
-import "dotenv/config"
+import type { GatsbyConfig, PluginRef } from 'gatsby';
+import 'dotenv/config';
 
-const shouldAnalyseBundle = process.env.ANALYSE_BUNDLE
+const shouldAnalyseBundle = process.env.ANALYSE_BUNDLE;
 
 const config: GatsbyConfig = {
-  siteMetadata: {
-    // You can overwrite values here that are used for the SEO component
-    // You can also add new values here to query them like usual
-    // See all options: https://github.com/LekoArts/gatsby-themes/blob/main/themes/gatsby-theme-minimal-blog/gatsby-config.mjs
-    siteTitle: `SEUNGLAB.dev`,
-    siteTitleAlt: `SEUNG LAB`,
-    siteHeadline: `Developer Blog - SEUNG LAB`,
-    siteUrl: `https://seunglab.netlify.app/`,
-    siteDescription: `Explore SeungHun's Dev Blog: a place for discovery, growth, and discussion in the ever-evolving world of software development.`,
-    siteImage: `/banner.png`,
-    siteLanguage: ['ko', 'en'],
-    author: `@shhan730`,
-  },
-  trailingSlash: `never`,
-  plugins: [
-    {
-      resolve: `@lekoarts/gatsby-theme-minimal-blog`,
-      // See the theme's README for all available options
-      options: {
-        navigation: [
-          {
-            title: `Blog`,
-            slug: `/blog`,
-          },
-          {
-            title: `About`,
-            slug: `/about`,
-          },
-        ],
-        externalLinks: [
-          {
-            name: `Github`,
-            url: `https://github.com/shhan730`,
-          },
-          {
-            name: `LinkedIn`,
-            url: `https://www.linkedin.com/in/seunghun-han`,
-          },
-        ],
-      },
+    siteMetadata: {
+        // You can overwrite values here that are used for the SEO component
+        // You can also add new values here to query them like usual
+        // See all options: https://github.com/LekoArts/gatsby-themes/blob/main/themes/gatsby-theme-minimal-blog/gatsby-config.mjs
+        siteTitle: `SEUNGLAB.dev`,
+        siteTitleAlt: `SEUNG LAB`,
+        siteHeadline: `Developer Blog - SEUNG LAB`,
+        siteUrl: `https://seunglab.dev`,
+        siteDescription: `Explore SeungHun's Dev Blog: a place for discovery, growth, and discussion in the ever-evolving world of software development.`,
+        siteImage: `/banner.png`,
+        siteLanguage: ['ko', 'en'],
+        author: `@shhan730`,
     },
-    {
-      resolve: `gatsby-plugin-sitemap`,
-      options: {
-        output: `/`,
-      },
-    },
-    {
-      resolve: `gatsby-plugin-manifest`,
-      options: {
-        name: `shhan-dev-blog`,
-        short_name: `shhan-dev-blog`,
-        description: `Explore SeungHun's Dev Blog: a place for discovery, growth, and discussion in the ever-evolving world of software development.`,
-        start_url: `/`,
-        background_color: `#fff`,
-        // This will impact how browsers show your PWA/website
-        // https://css-tricks.com/meta-theme-color-and-trickery/
-        // theme_color: `#6B46C1`,
-        display: `standalone`,
-        icons: [
-          {
-            src: `/android-chrome-192x192.png`,
-            sizes: `192x192`,
-            type: `image/png`,
-          },
-          {
-            src: `/android-chrome-512x512.png`,
-            sizes: `512x512`,
-            type: `image/png`,
-          },
-        ],
-      },
-    },
-    {
-      resolve: `gatsby-plugin-feed`,
-      options: {
-        query: `
+    trailingSlash: `never`,
+    plugins: [
+        {
+            resolve: `gatsby-plugin-disqus`,
+            options: {
+                shortname: `seunglab-comments`,
+            },
+        },
+        {
+            resolve: `@lekoarts/gatsby-theme-minimal-blog`,
+            // See the theme's README for all available options
+            options: {
+                navigation: [
+                    {
+                        title: `Blog`,
+                        slug: `/blog`,
+                    },
+                    {
+                        title: `About`,
+                        slug: `/about`,
+                    },
+                ],
+                externalLinks: [
+                    {
+                        name: `Github`,
+                        url: `https://github.com/shhan730`,
+                    },
+                    {
+                        name: `LinkedIn`,
+                        url: `https://www.linkedin.com/in/seunghun-han`,
+                    },
+                ],
+            },
+        },
+        {
+            resolve: `gatsby-plugin-sitemap`,
+            options: {
+                output: `/`,
+            },
+        },
+        {
+            resolve: `gatsby-plugin-manifest`,
+            options: {
+                name: `shhan-dev-blog`,
+                short_name: `shhan-dev-blog`,
+                description: `Explore SeungHun's Dev Blog: a place for discovery, growth, and discussion in the ever-evolving world of software development.`,
+                start_url: `/`,
+                background_color: `#fff`,
+                // This will impact how browsers show your PWA/website
+                // https://css-tricks.com/meta-theme-color-and-trickery/
+                // theme_color: `#6B46C1`,
+                display: `standalone`,
+                icons: [
+                    {
+                        src: `/android-chrome-192x192.png`,
+                        sizes: `192x192`,
+                        type: `image/png`,
+                    },
+                    {
+                        src: `/android-chrome-512x512.png`,
+                        sizes: `512x512`,
+                        type: `image/png`,
+                    },
+                ],
+            },
+        },
+        {
+            resolve: `gatsby-plugin-feed`,
+            options: {
+                query: `
           {
             site {
               siteMetadata {
@@ -92,27 +98,33 @@ const config: GatsbyConfig = {
             }
           }
         `,
-        feeds: [
-          {
-            serialize: ({
-              query: { site, allPost },
-            }: {
-              query: { allPost: IAllPost; site: { siteMetadata: ISiteMetadata } }
-            }) =>
-              allPost.nodes.map((post) => {
-                const url = site.siteMetadata.siteUrl + post.slug
-                const content = `<p>${post.excerpt}</p><div style="margin-top: 50px; font-style: italic;"><strong><a href="${url}">Keep reading</a>.</strong></div><br /> <br />`
+                feeds: [
+                    {
+                        serialize: ({
+                            query: { site, allPost },
+                        }: {
+                            query: {
+                                allPost: IAllPost;
+                                site: { siteMetadata: ISiteMetadata };
+                            };
+                        }) =>
+                            allPost.nodes.map((post) => {
+                                const url =
+                                    site.siteMetadata.siteUrl + post.slug;
+                                const content = `<p>${post.excerpt}</p><div style="margin-top: 50px; font-style: italic;"><strong><a href="${url}">Keep reading</a>.</strong></div><br /> <br />`;
 
-                return {
-                  title: post.title,
-                  date: post.date,
-                  excerpt: post.excerpt,
-                  url,
-                  guid: url,
-                  custom_elements: [{ "content:encoded": content }],
-                }
-              }),
-            query: `{
+                                return {
+                                    title: post.title,
+                                    date: post.date,
+                                    excerpt: post.excerpt,
+                                    url,
+                                    guid: url,
+                                    custom_elements: [
+                                        { 'content:encoded': content },
+                                    ],
+                                };
+                            }),
+                        query: `{
   allPost(sort: {date: DESC}) {
     nodes {
       title
@@ -122,64 +134,64 @@ const config: GatsbyConfig = {
     }
   }
 }`,
-            output: `rss.xml`,
-            title: `Dev Blog - @shhan730/shhan-dev-blog`,
-          },
-        ],
-      },
-    },
-    // You can remove this plugin if you don't need it
-    shouldAnalyseBundle && {
-      resolve: `gatsby-plugin-webpack-statoscope`,
-      options: {
-        saveReportTo: `${__dirname}/public/.statoscope/_bundle.html`,
-        saveStatsTo: `${__dirname}/public/.statoscope/_stats.json`,
-        open: false,
-      },
-    },
-    {
-      resolve: `gatsby-plugin-gtag`,
-      options: {
-          trackingId: `G-BRDJRECNR2`,
-          head: true,
-      },
-    },
-  ].filter(Boolean) as Array<PluginRef>,
-}
+                        output: `rss.xml`,
+                        title: `Dev Blog - @shhan730/shhan-dev-blog`,
+                    },
+                ],
+            },
+        },
+        // You can remove this plugin if you don't need it
+        shouldAnalyseBundle && {
+            resolve: `gatsby-plugin-webpack-statoscope`,
+            options: {
+                saveReportTo: `${__dirname}/public/.statoscope/_bundle.html`,
+                saveStatsTo: `${__dirname}/public/.statoscope/_stats.json`,
+                open: false,
+            },
+        },
+        {
+            resolve: `gatsby-plugin-gtag`,
+            options: {
+                trackingId: `G-BRDJRECNR2`,
+                head: true,
+            },
+        },
+    ].filter(Boolean) as Array<PluginRef>,
+};
 
-export default config
+export default config;
 
 interface IPostTag {
-  name: string
-  slug: string
+    name: string;
+    slug: string;
 }
 
 interface IPost {
-  slug: string
-  title: string
-  defer: boolean
-  date: string
-  excerpt: string
-  contentFilePath: string
-  html: string
-  timeToRead: number
-  wordCount: number
-  tags: Array<IPostTag>
-  banner: any
-  description: string
-  canonicalUrl: string
+    slug: string;
+    title: string;
+    defer: boolean;
+    date: string;
+    excerpt: string;
+    contentFilePath: string;
+    html: string;
+    timeToRead: number;
+    wordCount: number;
+    tags: Array<IPostTag>;
+    banner: any;
+    description: string;
+    canonicalUrl: string;
 }
 
 interface IAllPost {
-  nodes: Array<IPost>
+    nodes: Array<IPost>;
 }
 
 interface ISiteMetadata {
-  siteTitle: string
-  siteTitleAlt: string
-  siteHeadline: string
-  siteUrl: string
-  siteDescription: string
-  siteImage: string
-  author: string
+    siteTitle: string;
+    siteTitleAlt: string;
+    siteHeadline: string;
+    siteUrl: string;
+    siteDescription: string;
+    siteImage: string;
+    author: string;
 }
