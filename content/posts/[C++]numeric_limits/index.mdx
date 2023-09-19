@@ -110,10 +110,18 @@ Ex) `numeric_limits<T>::lowest()`
 
 [IEEE 754](https://ko.wikipedia.org/wiki/IEEE_754)
 
-import DisqusComponent from './DisqusComponent';
-
-<DisqusComponent
-    id="C++의 numeric_limits"
-    title="SEUNGLAB.dev"
-    url="https://seunglab.dev/c-%EC%9D%98-numeric-limits"
+<section
+    ref={(elem) => {
+        if (!elem) {
+            return;
+        }
+        const scriptElem = document.createElement('script');
+        scriptElem.src = 'https://utteranc.es/client.js';
+        scriptElem.async = true;
+        scriptElem.crossOrigin = 'anonymous';
+        scriptElem.setAttribute('repo', 'shhan730/shhan-dev-blog');
+        scriptElem.setAttribute('issue-term', 'pathname');
+        scriptElem.setAttribute('theme', 'dark-blue');
+        elem.appendChild(scriptElem);
+    }}
 />
