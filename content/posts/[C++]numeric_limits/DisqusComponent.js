@@ -1,22 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Disqus } from 'gatsby-plugin-disqus';
+import React from 'react';
+import DiscussionEmbed from 'gatsby-plugin-disqus';
 
-const DisqusForMDX = ({ post }) => {
-    const [disqusConfig, setDisqusConfig] = useState(null);
+const DisqusComponent = ({ id, title, url }) => {
+    const disqusConfig = {
+        url: url,
+        identifier: id,
+        title: title,
+    };
 
-    useEffect(() => {
-        if (window && post) {
-            setDisqusConfig({
-                url: `${window.location.href}`,
-                identifier: post.id,
-                title: post.title,
-            });
-        }
-    }, [post]);
-
-    if (!disqusConfig) return null;
-
-    return <Disqus config={disqusConfig} />;
+    return <DiscussionEmbed config={disqusConfig} />;
 };
 
-export default DisqusForMDX;
+export default DisqusComponent;
